@@ -4,6 +4,16 @@ All notable changes to the Hybrid Movie Recommendation System will be documented
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [1.0.1] - 2026-10-13
+
+### Fixed
+- **Sidebar Layout & Sizing**:
+  - Corrected sidebar container flexbox from row orientation to vertical column (`flex-direction: column !important`), restoring full 320px width for all sidebar controls.
+  - Resolved horizontal content squishing and awkward line breaks on navigation options (`🏠 Home`, `✨ Recommendations`, `📊 Model Evaluation`, `ℹ️ About`).
+  - Added `white-space: nowrap` and clean alignment for Model Settings heading, branding, and navigation pills.
+  - Ensured full width for recommendation model dropdown, alpha slider, CF/KNN badges, and count selectors.
+  - Guaranteed vertical scrolling capability within the sidebar when viewport height is constrained.
+
 ## [1.0.0] - 2026-10-13
 
 ### Added

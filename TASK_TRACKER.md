@@ -7,12 +7,12 @@
 
 ## Progress Overview
 
-- **Total Tasks**: 14
-- **Verified Completed Tasks**: 14
+- **Total Tasks**: 15
+- **Verified Completed Tasks**: 15
 - **In Progress Tasks**: 0
 - **Not Started Tasks**: 0
 - **Blocked Tasks**: 0
-- **Completion Rate**: 100.0% (14 / 14 verified)
+- **Completion Rate**: 100.0% (15 / 15 verified)
 
 ---
 
@@ -34,6 +34,7 @@
 | **TASK-12** | Interactive Streamlit UI implementation (`app.py`) with navy/purple theme | **DONE** | `app.py` | `streamlit run app.py` + HTTP status test | HTTP 200 OK verified; dark navy theme, cards, navigation functional | None |
 | **TASK-13** | Full end-to-end integration test & test suite verification | **DONE** | `tests/test_app_integration.py` | `pytest -v` | 18 passed in 5.37s across entire repository | None |
 | **TASK-14** | Documentation completion, Git safety review & secret scan | **DONE** | `README.md`, `CHANGELOG.md`, `TASK_TRACKER.md` | `git status`, secret regex scan | 0 secrets found, all files committed cleanly | None |
+| **TASK-15** | Sidebar layout and width restoration (`app.py`) | **DONE** | `app.py`, `CHANGELOG.md`, `TASK_TRACKER.md` | `pytest -v`, Streamlit `AppTest`, HTTP 200 | Sidebar fixed at 320px, vertical column stacking restored, zero text wrapping | None |
 
 ---
 

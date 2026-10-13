@@ -37,70 +37,365 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# Custom CSS for Dark Navy & Purple/Blue Theme
+# Custom CSS for Dark Navy & Purple/Blue Theme Matching Reference Screenshot
 st.markdown(
     """
     <style>
-    /* Dark Navy Background */
+    /* 1. Global Dark Navy Canvas */
     .stApp {
-        background-color: #0b0f19;
+        background-color: #060b17;
         color: #f1f5f9;
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
 
-    /* Sidebar Styling */
-    section[data-testid="stSidebar"] {
-        background-color: #0f172a !important;
-        border-right: 1px solid #1e293b;
+    /* 2. Streamlit Header Chrome Styling (Eliminate white strip & menu without breaking sidebar) */
+    header[data-testid="stHeader"] {
+        background-color: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        height: 0px !important;
+        min-height: 0px !important;
+        padding: 0 !important;
+        z-index: 50 !important;
+    }
+    #MainMenu { display: none !important; }
+    footer { display: none !important; }
+    div[data-testid="stDecoration"] { display: none !important; }
+    div[data-testid="stAppDeployButton"] { display: none !important; }
+    button[data-testid="stDeployButton"] { display: none !important; }
+    div[data-testid="stStatusWidget"] { display: none !important; }
+    div[data-testid="stToolbar"] { display: none !important; }
+
+    /* 3. Main Container Spacing & Layout */
+    .main .block-container,
+    div[data-testid="stMainBlockContainer"] {
+        padding-top: 1.6rem !important;
+        padding-bottom: 2.5rem !important;
+        padding-left: 2rem !important;
+        padding-right: 2rem !important;
+        max-width: 1220px !important;
     }
 
-    /* Headings & Purple Gradient Text */
-    h1, h2, h3 {
-        color: #f8fafc !important;
-        font-weight: 700;
+    /* 4. Permanently Visible Fixed Left Sidebar */
+    section[data-testid="stSidebar"],
+    section[data-testid="stSidebar"][aria-expanded="false"],
+    section[data-testid="stSidebar"][aria-expanded="true"],
+    [data-testid="stSidebar"] {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        position: relative !important;
+        transform: none !important;
+        left: 0px !important;
+        margin-left: 0px !important;
+        min-width: 320px !important;
+        max-width: 320px !important;
+        width: 320px !important;
+        flex: 0 0 320px !important;
+        flex-shrink: 0 !important;
+        background-color: #0b1120 !important;
+        border-right: 1px solid #16213b !important;
+        padding: 0 !important;
+        z-index: 99 !important;
+        transition: none !important;
     }
-    .gradient-title {
-        background: linear-gradient(135deg, #a855f7 0%, #6366f1 50%, #38bdf8 100%);
+
+    /* Scrollable vertical column for sidebar contents */
+    div[data-testid="stSidebarContent"] {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        height: 100% !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        padding: 1.2rem 1.25rem 2rem 1.25rem !important;
+        box-sizing: border-box !important;
+    }
+
+    div[data-testid="stSidebarUserContent"] {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        flex: 1 1 auto !important;
+        padding: 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Ensure all widgets and vertical blocks in sidebar span full 100% width */
+    div[data-testid="stSidebarUserContent"] > div,
+    div[data-testid="stSidebar"] div[data-testid="stVerticalBlock"] {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    /* Hide collapse and expand toggle chevrons to keep sidebar permanently docked */
+    button[data-testid="stSidebarCollapseButton"],
+    [data-testid="stSidebarCollapseButton"],
+    button[data-testid="stExpandSidebarButton"],
+    [data-testid="stExpandSidebarButton"] {
+        display: none !important;
+    }
+
+    /* 5. Navigation Radio Items & Active Solid Purple Pill */
+    div[data-testid="stRadio"] > label {
+        color: #64748b !important;
+        font-weight: 700;
+        font-size: 0.76rem;
+        text-transform: capitalize;
+        letter-spacing: 0.04em;
+        margin-bottom: 8px;
+    }
+    div[data-testid="stRadio"] div[role="radiogroup"] {
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 4px !important;
+    }
+    div[data-testid="stRadio"] div[role="radiogroup"] > label {
+        display: flex !important;
+        align-items: center !important;
+        width: 100% !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        color: #cbd5e1 !important;
+        font-weight: 500;
+        font-size: 0.95rem;
+        padding: 10px 14px !important;
+        border-radius: 10px !important;
+        margin-bottom: 4px !important;
+        border: 1px solid transparent !important;
+        transition: all 0.15s ease-in-out !important;
+        cursor: pointer !important;
+    }
+    /* Hide the radio button circle bullet for clean pill look */
+    div[data-testid="stRadio"] div[role="radiogroup"] > label > div:first-child {
+        display: none !important;
+    }
+    div[data-testid="stRadio"] div[role="radiogroup"] > label:has(input:checked) {
+        background: #4f46e5 !important;
+        border: 1px solid #6366f1 !important;
+        color: #ffffff !important;
+        font-weight: 600 !important;
+        box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4) !important;
+    }
+    div[data-testid="stRadio"] div[role="radiogroup"] > label:hover {
+        background-color: #16213b !important;
+        color: #ffffff !important;
+    }
+
+    /* 6. Selectbox & Dropdown Dark Theme */
+    div[data-baseweb="select"] > div {
+        background-color: #0f172a !important;
+        border: 1px solid #1e293b !important;
+        color: #f8fafc !important;
+        border-radius: 8px !important;
+    }
+    div[data-baseweb="select"] span {
+        color: #f8fafc !important;
+    }
+
+    /* 7. Slider Styling in Unified Purple Palette */
+    div[data-testid="stSlider"] label {
+        color: #cbd5e1 !important;
+        font-weight: 500;
+        font-size: 0.88rem;
+    }
+    div[data-testid="stSlider"] div[data-baseweb="slider"] div[role="slider"] {
+        background-color: #8b5cf6 !important;
+        border-color: #c084fc !important;
+        box-shadow: 0 0 10px rgba(139, 92, 246, 0.5) !important;
+    }
+    div[data-testid="stSlider"] div[data-baseweb="slider"] > div > div {
+        background-color: #6366f1 !important;
+    }
+
+    /* 8. Hero Card on Home Dashboard */
+    .hero-card {
+        background: linear-gradient(135deg, #0d1527 0%, #080f1d 100%);
+        border: 1px solid #1a2744;
+        border-radius: 14px;
+        padding: 24px 28px;
+        margin-bottom: 22px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    }
+    .hero-top {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        margin-bottom: 18px;
+    }
+    .hero-icon-box {
+        font-size: 1.8rem;
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        width: 52px;
+        height: 52px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+        flex-shrink: 0;
+    }
+    .hero-title {
+        font-size: 2.1rem;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        background: linear-gradient(135deg, #a855f7 0%, #6366f1 45%, #38bdf8 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        font-weight: 800;
-        font-size: 2.3rem;
-        margin-bottom: 0.2rem;
+        line-height: 1.2;
     }
-    .sub-title {
-        color: #94a3b8;
+    .hero-subtitle {
         font-size: 1rem;
-        margin-bottom: 1.5rem;
-    }
-
-    /* Card Containers */
-    .metric-card {
-        background-color: #1e293b;
-        border: 1px solid #334155;
-        border-radius: 10px;
-        padding: 16px 20px;
-        margin-bottom: 15px;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
-    }
-    .metric-val {
-        font-size: 1.8rem;
-        font-weight: 700;
-        color: #a855f7;
-    }
-    .metric-lbl {
-        font-size: 0.85rem;
         color: #94a3b8;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
+        font-weight: 500;
+        margin-top: 2px;
+    }
+    .hero-objective {
+        border-top: 1px solid #16213b;
+        padding-top: 16px;
+    }
+    .objective-heading {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #f8fafc;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 6px;
+    }
+    .objective-text {
+        font-size: 0.92rem;
+        color: #cbd5e1;
+        line-height: 1.55;
     }
 
-    /* Recommendation Movie Card */
+    /* 9. Dataset Summary Metric Cards */
+    /* Equal Height Columns Container */
+    div[data-testid="column"] {
+        display: flex !important;
+        flex-direction: column !important;
+    }
+    div[data-testid="column"] > div {
+        flex: 1 !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    /* 9. Dataset Summary Metric Cards */
+    .metric-card-box {
+        background: linear-gradient(180deg, #0d1527 0%, #09101f 100%);
+        border: 1px solid #1a2744;
+        border-radius: 12px;
+        padding: 18px 20px;
+        height: 100%;
+        min-height: 175px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        box-sizing: border-box;
+        transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+    .metric-card-box:hover {
+        border-color: #3b82f6;
+        transform: translateY(-2px);
+    }
+    .metric-circle-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.15rem;
+        margin-bottom: 12px;
+    }
+    .metric-lbl-text {
+        font-size: 0.76rem;
+        color: #94a3b8;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-bottom: 4px;
+    }
+    .metric-val-movies {
+        font-size: 1.75rem;
+        font-weight: 800;
+        color: #c084fc;
+        line-height: 1.25;
+    }
+    .metric-val-ratings {
+        font-size: 1.75rem;
+        font-weight: 800;
+        color: #60a5fa;
+        line-height: 1.25;
+    }
+    .metric-val-sparsity {
+        font-size: 1.75rem;
+        font-weight: 800;
+        color: #2dd4bf;
+        line-height: 1.25;
+    }
+    .metric-val-split {
+        font-size: 1.3rem;
+        font-weight: 800;
+        color: #818cf8;
+        line-height: 1.25;
+        white-space: nowrap;
+    }
+    .metric-sub-text {
+        font-size: 0.76rem;
+        color: #64748b;
+        margin-top: 4px;
+    }
+
+    /* 10. Quick Navigation Cards */
+    .quick-nav-container {
+        background: linear-gradient(180deg, #0d1527 0%, #09101f 100%);
+        border: 1px solid #1a2744;
+        border-radius: 12px;
+        padding: 24px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    .quick-nav-header {
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+        margin-bottom: 18px;
+    }
+    .quick-nav-icon-circle {
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.3rem;
+        flex-shrink: 0;
+    }
+    .quick-nav-title {
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: #f8fafc;
+        margin-bottom: 4px;
+    }
+    .quick-nav-desc {
+        font-size: 0.88rem;
+        color: #94a3b8;
+        line-height: 1.5;
+    }
+
+    /* 11. Recommendation Movie Card */
     .movie-card {
-        background: linear-gradient(180deg, #1e293b 0%, #151d2f 100%);
-        border: 1px solid #334155;
+        background: linear-gradient(180deg, #0d1527 0%, #09101f 100%);
+        border: 1px solid #1a2744;
         border-left: 4px solid #8b5cf6;
-        border-radius: 8px;
-        padding: 14px 18px;
+        border-radius: 10px;
+        padding: 18px 22px;
         margin-bottom: 12px;
         transition: transform 0.15s ease-in-out, border-color 0.15s ease-in-out;
     }
@@ -109,7 +404,7 @@ st.markdown(
         transform: translateY(-2px);
     }
     .movie-title {
-        font-size: 1.1rem;
+        font-size: 1.15rem;
         font-weight: 600;
         color: #f8fafc;
         margin-bottom: 4px;
@@ -117,41 +412,118 @@ st.markdown(
     .movie-genres {
         font-size: 0.85rem;
         color: #94a3b8;
-        margin-bottom: 8px;
+        margin-bottom: 10px;
     }
     .movie-badge {
         display: inline-block;
-        padding: 3px 8px;
-        background-color: #312e81;
+        padding: 4px 10px;
+        background-color: #1e1b4b;
         color: #c7d2fe;
-        font-size: 0.75rem;
+        font-size: 0.78rem;
         font-weight: 600;
         border-radius: 4px;
-        margin-right: 6px;
+        margin-right: 8px;
+        border: 1px solid #312e81;
     }
     .rating-badge {
         display: inline-block;
-        padding: 3px 8px;
+        padding: 4px 10px;
         background-color: #1e1b4b;
-        color: #f59e0b;
-        font-size: 0.75rem;
+        color: #fbbf24;
+        font-size: 0.78rem;
         font-weight: 600;
         border-radius: 4px;
+        border: 1px solid #312e81;
     }
 
-    /* Primary Buttons */
-    div.stButton > button:first-child {
+    /* 12. Citation Box */
+    .citation-box {
+        background: linear-gradient(135deg, #0d1527 0%, #09101f 100%);
+        border: 1px solid #1a2744;
+        border-left: 4px solid #8b5cf6;
+        border-radius: 10px;
+        padding: 20px 24px;
+        margin-bottom: 20px;
+    }
+    .citation-title {
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: #f8fafc;
+        margin-bottom: 6px;
+    }
+    .citation-desc {
+        font-size: 0.92rem;
+        color: #cbd5e1;
+        line-height: 1.5;
+    }
+
+    /* 13. Buttons */
+    div.stButton > button {
+        border-radius: 8px;
+        font-weight: 600;
+        width: 100%;
+        transition: all 0.2s ease-in-out;
+    }
+    div.stButton > button[kind="primary"] {
         background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
         color: #ffffff;
-        font-weight: 600;
         border: none;
-        border-radius: 8px;
-        padding: 8px 24px;
-        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        padding: 10px 24px;
+        box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
     }
-    div.stButton > button:first-child:hover {
+    div.stButton > button[kind="primary"]:hover {
         background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
         color: #ffffff;
+    }
+    div.stButton > button[kind="secondary"] {
+        background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%) !important;
+        color: #ffffff !important;
+        border: none !important;
+        padding: 10px 24px !important;
+        box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35) !important;
+    }
+    div.stButton > button[kind="secondary"]:hover {
+        background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%) !important;
+        color: #ffffff !important;
+    }
+
+    /* 14. Section Headings & Metric Mini-Cards */
+    .gradient-title {
+        font-size: 2.1rem;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        background: linear-gradient(135deg, #a855f7 0%, #6366f1 45%, #38bdf8 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        line-height: 1.25;
+        margin-bottom: 4px;
+    }
+    .sub-title {
+        color: #94a3b8;
+        font-size: 0.98rem;
+        font-weight: 500;
+        margin-bottom: 22px;
+    }
+    .metric-card {
+        background: linear-gradient(180deg, #0d1527 0%, #09101f 100%);
+        border: 1px solid #1a2744;
+        border-radius: 10px;
+        padding: 16px 20px;
+        margin-bottom: 14px;
+    }
+    .metric-lbl {
+        color: #94a3b8;
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 4px;
+    }
+    .metric-val {
+        color: #38bdf8;
+        font-size: 1.7rem;
+        font-weight: 800;
+        line-height: 1.2;
     }
     </style>
     """,
@@ -229,77 +601,135 @@ best_alpha = models_bundle["best_alpha"]
 results_df = models_bundle["results_df"]
 val_tuning_history = models_bundle["val_tuning_history"]
 
-# Sidebar Navigation & Settings
-st.sidebar.markdown("## 🎬 Navigation")
-app_mode = st.sidebar.radio(
-    "Go to",
-    ["🏠 Home", "✨ Recommendations", "📊 Model Evaluation", "ℹ️ About"],
-    index=1,
+# Navigation state synchronization
+nav_options = ["🏠 Home", "✨ Recommendations", "📊 Model Evaluation", "ℹ️ About"]
+if "current_page" not in st.session_state:
+    st.session_state["current_page"] = "🏠 Home"
+
+if st.session_state["current_page"] not in nav_options:
+    st.session_state["current_page"] = "🏠 Home"
+
+# Sidebar Brand
+st.sidebar.markdown(
+    """
+    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 22px; padding: 4px 0 16px 0; border-bottom: 1px solid #16213b;">
+        <div style="font-size: 1.5rem; background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border-radius: 10px; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35); flex-shrink: 0;">🎬</div>
+        <div>
+            <div style="font-size: 1.05rem; font-weight: 800; color: #f8fafc; line-height: 1.25; white-space: nowrap;">Hybrid Movie</div>
+            <div style="font-size: 0.95rem; font-weight: 700; color: #f8fafc; line-height: 1.25; white-space: nowrap;">Recommendation System</div>
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True,
 )
 
-st.sidebar.markdown("---")
-st.sidebar.markdown("### ⚙️ Model Settings")
+st.sidebar.markdown(
+    '<div style="font-size: 0.8rem; font-weight: 600; color: #64748b; margin-bottom: 6px;">Navigation</div>',
+    unsafe_allow_html=True,
+)
+
+app_mode = st.sidebar.radio(
+    "Navigation",
+    nav_options,
+    index=nav_options.index(st.session_state["current_page"]),
+    label_visibility="collapsed",
+)
+st.session_state["current_page"] = app_mode
+
+st.sidebar.markdown(
+    '<div style="font-size: 1.05rem; font-weight: 700; color: #f8fafc; margin-top: 24px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; white-space: nowrap;">⚙️ Model Settings</div>',
+    unsafe_allow_html=True,
+)
 
 selected_model_name = st.sidebar.selectbox(
-    "Recommendation Model",
-    ["Hybrid CF+KNN", "Item-Based CF", "Standalone KNN"],
+    "Select Model",
+    ["Hybrid CF + KNN", "Item-Based CF", "Standalone KNN"],
     index=0,
 )
 
 # Alpha Control for Hybrid Model
 current_alpha = PAPER_REFERENCE_ALPHA
-if selected_model_name == "Hybrid CF+KNN":
-    col_a, col_b = st.sidebar.columns([3, 1])
-    use_tuned = col_b.button("Use Best α", help=f"Set to validation-tuned α = {best_alpha}")
-
-    default_slider_alpha = best_alpha if use_tuned else PAPER_REFERENCE_ALPHA
+if selected_model_name in ["Hybrid CF + KNN", "Hybrid CF+KNN"]:
     current_alpha = st.sidebar.slider(
-        "Alpha Blending Weight (α)",
+        "Alpha (Hybrid Weight)",
         min_value=0.0,
         max_value=1.0,
-        value=float(default_slider_alpha),
+        value=float(PAPER_REFERENCE_ALPHA),
         step=0.05,
-        help="α = CF weight, (1 - α) = KNN weight. Reference: 0.95",
+        help="Weight parameter α balancing Collaborative Filtering and KNN (Reference value: 0.95)",
     )
     hybrid_model.set_alpha(current_alpha)
 
-    st.sidebar.caption(
-        f"**Weights**: CF = `{current_alpha*100:.0f}%` | KNN = `{(1-current_alpha)*100:.0f}%`"
+    cf_pct = int(round(current_alpha * 100))
+    knn_pct = int(round((1.0 - current_alpha) * 100))
+
+    st.sidebar.markdown(
+        f"""
+        <div style="display: flex; gap: 10px; margin-top: 4px; margin-bottom: 16px;">
+            <div style="flex: 1; text-align: center; background: #1e1b4b; border: 1px solid #4338ca; color: #c7d2fe; padding: 7px 10px; border-radius: 8px; font-weight: 700; font-size: 0.82rem;">
+                CF {cf_pct}%
+            </div>
+            <div style="flex: 1; text-align: center; background: #0c2d48; border: 1px solid #0284c7; color: #38bdf8; padding: 7px 10px; border-radius: 8px; font-weight: 700; font-size: 0.82rem;">
+                KNN {knn_pct}%
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
     )
 
 top_n_choice = st.sidebar.selectbox("Recommendation Count", [3, 5, 10], index=1)
 genre_filter_choice = st.sidebar.selectbox("Genre Filter", ["All"] + genres_list, index=0)
 
+st.sidebar.markdown(
+    """
+    <div style="margin-top: 36px; padding-top: 18px; border-top: 1px solid #16213b; display: flex; align-items: center; gap: 10px;">
+        <span style="font-size: 1.4rem;">🎓</span>
+        <div>
+            <div style="font-size: 0.82rem; font-weight: 600; color: #94a3b8;">Research Mini Project</div>
+            <div style="font-size: 0.72rem; color: #64748b;">Thakur Institute of Management Studies</div>
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
 # -------------------------------------------------------------
 # PAGE 1: HOME
 # -------------------------------------------------------------
 if app_mode == "🏠 Home":
-    st.markdown('<div class="gradient-title">Hybrid Movie Recommendation System</div>', unsafe_allow_html=True)
+    # Hero Card
     st.markdown(
-        '<div class="sub-title">A Research Implementation Combining Item-Based Collaborative Filtering and K-Nearest Neighbours</div>',
+        """
+        <div class="hero-card">
+            <div class="hero-top">
+                <div class="hero-icon-box">🎬</div>
+                <div>
+                    <div class="hero-title">Hybrid Movie Recommendation System</div>
+                    <div class="hero-subtitle">Item-Based Collaborative Filtering + KNN</div>
+                </div>
+            </div>
+            <div class="hero-objective">
+                <div class="objective-heading">🎯 Research Objective</div>
+                <div class="objective-text">
+                    To design an efficient hybrid recommender system using Item-Based Filtering and Machine Learning Models for movie recommendation by combining the strengths of Collaborative Filtering and K-Nearest Neighbours (KNN) using an alpha-weighted approach.
+                </div>
+            </div>
+        </div>
+        """,
         unsafe_allow_html=True,
     )
 
-    st.markdown(
-        """
-        Welcome to the **Hybrid Movie Recommender**, built according to the research methodology of:  
-        *Design of an Efficient Hybrid Recommender System Using Item-Based Filtering and Machine Learning Models for Movie Recommendation*  
-        by **Rutvik Somnath Khake** and **Sandip Ghanshyam Kori** (*TIMSCDR, Mumbai*).
-        
-        This system solves matrix sparsity and cold-start boundaries in movie catalogs by intelligently blending 
-        an **Item-Based Collaborative Filtering** similarity network with a **K-Nearest Neighbours (KNN)** machine learning model.
-        """
-    )
-
-    st.markdown("### 📊 Dataset Summary")
+    # 4 Metric Cards
     col1, col2, col3, col4 = st.columns(4)
 
     with col1:
         st.markdown(
             f"""
-            <div class="metric-card">
-                <div class="metric-lbl">Total Movies</div>
-                <div class="metric-val">{len(movies_df):,}</div>
+            <div class="metric-card-box">
+                <div class="metric-circle-icon" style="background: rgba(168, 85, 247, 0.2); color: #c084fc;">🎞️</div>
+                <div class="metric-lbl-text">TOTAL MOVIES</div>
+                <div class="metric-val-movies">{len(movies_df):,}</div>
+                <div class="metric-sub-text">(loaded MovieLens data)</div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -307,9 +737,11 @@ if app_mode == "🏠 Home":
     with col2:
         st.markdown(
             f"""
-            <div class="metric-card">
-                <div class="metric-lbl">Total Ratings</div>
-                <div class="metric-val">{len(data_bundle['ratings_df']):,}</div>
+            <div class="metric-card-box">
+                <div class="metric-circle-icon" style="background: rgba(59, 130, 246, 0.2); color: #60a5fa;">👥</div>
+                <div class="metric-lbl-text">TOTAL RATINGS</div>
+                <div class="metric-val-ratings">{len(data_bundle['ratings_df']):,}</div>
+                <div class="metric-sub-text">(loaded MovieLens data)</div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -317,9 +749,11 @@ if app_mode == "🏠 Home":
     with col3:
         st.markdown(
             f"""
-            <div class="metric-card">
-                <div class="metric-lbl">Matrix Sparsity</div>
-                <div class="metric-val">{data_bundle['sparsity']*100:.1f}%</div>
+            <div class="metric-card-box">
+                <div class="metric-circle-icon" style="background: rgba(45, 212, 191, 0.2); color: #2dd4bf;">🕸️</div>
+                <div class="metric-lbl-text">MATRIX SPARSITY</div>
+                <div class="metric-val-sparsity">{data_bundle['sparsity']*100:.1f}%</div>
+                <div class="metric-sub-text">(loaded MovieLens data)</div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -327,20 +761,69 @@ if app_mode == "🏠 Home":
     with col4:
         st.markdown(
             f"""
-            <div class="metric-card">
-                <div class="metric-lbl">Train / Val / Test</div>
-                <div class="metric-val">80 / 10 / 10%</div>
+            <div class="metric-card-box">
+                <div class="metric-circle-icon" style="background: rgba(99, 102, 241, 0.2); color: #818cf8;">💾</div>
+                <div class="metric-lbl-text">TRAIN / VALIDATION / TEST</div>
+                <div class="metric-val-split">80% / 10% / 10%</div>
+                <div class="metric-sub-text">(reproducible split)</div>
             </div>
             """,
             unsafe_allow_html=True,
         )
 
-    st.markdown("### 🚀 Quick Navigation")
-    col_nav1, col_nav2 = st.columns(2)
-    with col_nav1:
-        st.info("🎯 **Recommendations Tab**: Pick any movie from the catalog, adjust model & alpha weights, and generate top-N suggestions.")
-    with col_nav2:
-        st.success("📈 **Model Evaluation Tab**: Inspect test-set RMSE/MAE benchmarks, execution times, and alpha validation tuning curves.")
+    # Quick Navigation Section
+    st.markdown(
+        """
+        <div style="margin-top: 30px; margin-bottom: 16px;">
+            <div style="font-size: 1.45rem; font-weight: 800; color: #f8fafc; display: flex; align-items: center; gap: 8px;">
+                <span>🚀</span> Quick Navigation
+            </div>
+            <div style="font-size: 0.9rem; color: #94a3b8; margin-top: 2px;">
+                Explore the features of the Hybrid Movie Recommendation System
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    col_q1, col_q2 = st.columns(2)
+    with col_q1:
+        st.markdown(
+            """
+            <div class="quick-nav-container">
+                <div class="quick-nav-header">
+                    <div class="quick-nav-icon-circle" style="background: rgba(168, 85, 247, 0.2); color: #c084fc;">🔍</div>
+                    <div>
+                        <div class="quick-nav-title">Explore Recommendations</div>
+                        <div class="quick-nav-desc">Search for a movie and get personalized recommendations using our hybrid model.</div>
+                    </div>
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+        if st.button("Go to Recommendations ➔", key="btn_nav_rec", type="primary"):
+            st.session_state["current_page"] = "✨ Recommendations"
+            st.rerun()
+
+    with col_q2:
+        st.markdown(
+            """
+            <div class="quick-nav-container">
+                <div class="quick-nav-header">
+                    <div class="quick-nav-icon-circle" style="background: rgba(59, 130, 246, 0.2); color: #60a5fa;">📊</div>
+                    <div>
+                        <div class="quick-nav-title">Evaluate Models</div>
+                        <div class="quick-nav-desc">Compare CF, KNN and Hybrid models using RMSE, MAE and training time metrics.</div>
+                    </div>
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+        if st.button("Go to Model Evaluation ➔", key="btn_nav_eval", type="secondary"):
+            st.session_state["current_page"] = "📊 Model Evaluation"
+            st.rerun()
 
 # -------------------------------------------------------------
 # PAGE 2: RECOMMENDATIONS
@@ -349,7 +832,7 @@ elif app_mode == "✨ Recommendations":
     st.markdown('<div class="gradient-title">Discover Movie Recommendations</div>', unsafe_allow_html=True)
     st.markdown(
         f'<div class="sub-title">Active Model: <b>{selected_model_name}</b> '
-        + (f'(α = {current_alpha:.2f})' if selected_model_name == 'Hybrid CF+KNN' else '')
+        + (f'(α = {current_alpha:.2f})' if "Hybrid" in selected_model_name else '')
         + '</div>',
         unsafe_allow_html=True,
     )
@@ -519,13 +1002,19 @@ elif app_mode == "ℹ️ About":
     st.markdown('<div class="sub-title">Theoretical Foundations, Mathematical Modeling & Architecture</div>', unsafe_allow_html=True)
 
     st.markdown("### 📄 Research Citation")
-    st.info(
+    st.markdown(
         """
-        **Paper Title**: *Design of an Efficient Hybrid Recommender System Using Item-Based Filtering and Machine Learning Models for Movie Recommendation*  
-        **Authors**: Rutvik Somnath Khake (Roll No: 69) & Sandip Ghanshyam Kori (Roll No: 78)  
-        **Academic Department**: Department of Master of Computer Applications (MCA)  
-        **Institution**: Thakur Institute of Management Studies, Career Development & Research (TIMSCDR), Mumbai.
-        """
+        <div class="citation-box">
+            <div class="citation-title">Research Paper Publication</div>
+            <div class="citation-desc">
+                <b>Title</b>: <i>Design of an Efficient Hybrid Recommender System Using Item-Based Filtering and Machine Learning Models for Movie Recommendation</i><br>
+                <b>Authors</b>: Rutvik Somnath Khake (Roll No: 69) &amp; Sandip Ghanshyam Kori (Roll No: 78)<br>
+                <b>Department</b>: Master of Computer Applications (MCA)<br>
+                <b>Institution</b>: Thakur Institute of Management Studies, Career Development &amp; Research (TIMSCDR), Mumbai.
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
     )
 
     st.markdown("### 📐 Mathematical Formulation")
