@@ -1,0 +1,52 @@
+# Environment and Secrets
+.env
+.env.*
+!.env.example
+secrets.toml
+.streamlit/secrets.toml
+
+# Python & Virtual Environments
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Testing & Tool Caches
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.mypy_cache/
+
+# Streamlit Cache & Runtime
+.streamlit/
+!.streamlit/config.toml
+
+# Local Datasets & Generated Artifacts
+data/
+*.csv
+*.zip
+*.tar.gz
+*.pkl
+*.joblib
+
+# Model Checkpoints & Logs
+models/
+*.log
+*.sqlite3
+
+# IDE & OS Files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+Thumbs.db
+desktop.ini
